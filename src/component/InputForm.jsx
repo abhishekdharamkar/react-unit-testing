@@ -3,14 +3,13 @@ import React, { useState } from 'react';
 function InputForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [flag, setFlag] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     setName('');
     setEmail('');
-    setMessage('');
   };
 
   return (
@@ -37,19 +36,12 @@ function InputForm() {
           />
         </label>
         <br />
-        <label>
-          Message:
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            rows="4"
-            cols="50"
-            required
-          ></textarea>
-        </label>
-        <br />
-        <input type="submit" value="Submit" />
+        <button type="submit" onClick={(e) => setFlag(true)} data-testid="submit1">Submit</button>
       </form>
+      <p>
+      {flag ? 
+        "hello" : null}
+      </p>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import sum from "./sum";
+import sum from "../BasicsJsTest/sum";
 
 test.skip("testing fo sum function",()=>{       // name,callback,setTimeout (optional) parameter 
     expect(sum(20,20)).toBe(40)

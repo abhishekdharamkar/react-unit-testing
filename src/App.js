@@ -1,10 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
+import InputForm from './component/InputForm';
 
 function App() {
   return (
     <div className="App">
-     <p>Abhishek</p>
+     <InputForm/>
     </div>
   );
 }
