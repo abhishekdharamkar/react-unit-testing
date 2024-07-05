@@ -1,49 +1,56 @@
 import React, { useState } from 'react';
 
-function InputForm() {
-  const [name, setName] = useState('');
+const InputForm = () => {
   const [email, setEmail] = useState('');
-  const [flag, setFlag] = useState(false);
+  const [name, setName] = useState('');
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = {};
 
-    setName('');
-    setEmail('');
+    if (!email) {
+      newErrors.email = 'Email is required';
+    }
+
+    if (!name) {
+      newErrors.name = 'Name is required';
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      // Form is valid, submit data
+      console.log({ email, name });
+    }
   };
 
   return (
-    <div>
-      <h2>Simple Form</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit" onClick={(e) => setFlag(true)} data-testid="submit1">Submit</button>
-      </form>
-      <p>
-      {flag ? 
-        "hello" : null}
-      </p>
-    </div>
+    <form onSubmit={handleSubmit} style={{margin:"9rem",display:"flex",flexDirection:"column",gap:"1rem"}}>
+      <div>
+        <label htmlFor="email">Email:</label> 
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        {errors.email && <span>{errors.email}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="name">Name:</label>
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        {errors.name && <span>{errors.name}</span>}
+      </div>
+      <button style={{width:"fit-content",placeSelf:"center"}} type="submit">Submit</button>
+    </form>
   );
-}
+};
 
 export default InputForm;

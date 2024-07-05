@@ -1,55 +1,35 @@
 import React from 'react';
-import { render,screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import InputForm from './InputForm';
 
-// test.skip('renders form with proper inputs', () => {
-//   const { getByLabelText, getByText } = render(<InputForm />);
-//   expect(getByLabelText('Name:')).toBeInTheDocument();
-//   expect(getByLabelText('Email:')).toBeInTheDocument();
-//   expect(getByText('Submit')).toBeInTheDocument();
-// });
-
-// //describe
-// describe("UI test case group", () => {
-//   test.skip("test case 1", () => {
-//   const { getByLabelText } = render(<InputForm />);
-//   expect(getByLabelText('Name:')).toBeInTheDocument();
-//   });
-//   test.skip("test case 2", () => {
-//     const { getByLabelText } = render(<InputForm />);
-//     expect(getByLabelText('Email:')).toBeInTheDocument();
+describe('Form Component', () => {
+  test('renders the form with email and name fields', () => {
+    const { getByLabelText } = render(<InputForm />);
     
-//   });
-// });
+    expect(getByLabelText(/email/i)).toBeInTheDocument();
+    expect(getByLabelText(/name/i)).toBeInTheDocument();
+  });
 
-// //fireEvent on change value
-// test.skip('typing in name input updates the state', () => {
-//   render(<InputForm />);
-  
-//   // Use getByLabelText to select the name input by its label
-//   const nameInput = screen.getByLabelText('Name:');
-  
-//   fireEvent.change(nameInput, { target: { value: 'John' } });
-  
-//   expect(nameInput.value).toBe('John');
-// });
+  test('displays validation messages when fields are empty', () => {
+    const { getByText, getByLabelText } = render(<InputForm />);
+    
+    fireEvent.change(getByLabelText(/email/i), { target: { value: '' } });
+    fireEvent.change(getByLabelText(/name/i), { target: { value: '' } });
+    fireEvent.click(getByText(/submit/i));
+    
+    expect(getByText(/email is required/i)).toBeInTheDocument();
+    expect(getByText(/name is required/i)).toBeInTheDocument();
+  });
 
-// //fireEvent on btn change
-// test('click event', () => {
-//   render(<InputForm />);
-  
-//   const btn =screen.getByRole("button")
-//   fireEvent.click(btn)
-
-//   expect(screen.getByText("Hello World")).toBeInTheDocument();
-// });
-
-
-
-//automate onchange testing
-  test('renders form with proper inputs', () => {
-  const { getByText } = render(<InputForm />);
-  const btn=screen.getByTestId("submit1");
-  fireEvent.click(btn);
-  expect(getByText('hello')).toBeInTheDocument();
+  test('does not display validation messages when fields are filled', () => {
+    const { queryByText, getByText, getByLabelText } = render(<InputForm />);
+    
+    fireEvent.change(getByLabelText(/email/i), { target: { value: 'test@example.com' } });
+    fireEvent.change(getByLabelText(/name/i), { target: { value: 'John Doe' } });
+    fireEvent.click(getByText(/submit/i));
+    
+    expect(queryByText(/email is required/i)).not.toBeInTheDocument();
+    expect(queryByText(/name is required/i)).not.toBeInTheDocument();
+  });
 });
